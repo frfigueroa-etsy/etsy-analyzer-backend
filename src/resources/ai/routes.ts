@@ -1,0 +1,21 @@
+import express, {Router} from 'express';
+import { OpenAIService } from '../../services/OpenAIService';
+import { envs } from '../../configs/envs';
+import { AIController } from './controller';
+
+export class AIRoutes {
+    static get routes(): Router {
+        const router = Router();
+
+        const openAIService = new OpenAIService(envs.OPENAI_API_KEY);
+        const controller = new AIController(openAIService);
+
+        router.get('/test', controller.test);
+        router.post('/analyze-seo', controller.analyzeSEO);
+        router.post('/benchmark-analyze', controller.benchmark);
+
+
+        return router;
+
+    }
+}

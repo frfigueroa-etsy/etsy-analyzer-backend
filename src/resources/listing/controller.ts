@@ -1,0 +1,62 @@
+import { Request, Response } from 'express';
+import { EtsyService } from '../../services/EtsyService';
+
+export class ListingController{
+    
+
+    constructor(public etsyService:EtsyService){}
+
+    public searchListings = async (req:Request, res:Response) => {
+        const keyword = req.query.q as string;
+        try {
+            const data = await this.etsyService.searchListings(keyword);
+            res.json(data);
+          } catch (e: any) {
+            res.status(500).json({ error: e.message });
+          }
+    }
+    public getListing = async (req:Request, res:Response) => {
+        const listingId = req.params.listingId;
+        try {
+            const data = await this.etsyService.getListing(listingId);
+            res.json(data);
+          } catch (e: any) {
+            res.status(500).json({ error: e.message });
+          }
+    }
+
+    public analyzeListing = async(req: Request, res: Response): Promise<void> => {
+      const { listingId } = req.body;
+      console.log(listingId)
+      
+      if (!listingId) {
+        res.status(400).json({ error: 'Missing listingId' });
+        return;
+      }
+      try {
+        const listingData = await this.etsyService.getListing(listingId);
+
+        const result = {
+          title: listingData.title,
+          description: listingData.description,
+          tags: listingData.tags || [],
+          price: listingData.price?.amount ? (listingData.price.amount / 100).toFixed(2) : null,
+          currency: listingData.price?.currency_code || null,
+          views: listingData.views,
+          favorites: listingData.num_favorers,
+          taxonomy_path: listingData.taxonomy_path || [],
+          who_made: listingData.who_made || '',
+          when_made: listingData.when_made || '',
+          is_supply: listingData.is_supply || false,
+          is_digital: listingData.is_digital || false
+        };
+    
+        res.json({ result });
+
+      } catch (e: any) {
+        console.log(e)
+        res.status(500).json({ error: e.message });
+      }
+    }
+
+}
