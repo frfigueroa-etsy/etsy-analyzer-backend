@@ -24,7 +24,7 @@ export class AIController{
           return;
         }
         try {
-            const response = await this.openAIService.generateCompletion(prompt, 'You are an expert in Etsy SEO.');
+            const response = await this.openAIService.generateCompletion(prompt, 'You are an expert in Etsy SEO. Analyze the following product and provide a SEO Score (0-100) and recommendations to improve its visibility on Etsy. Be clear and concise.`');
             res.json({ result: response });
           } catch (e: any) {
             res.status(500).json({ error: e.message });
@@ -38,14 +38,23 @@ export class AIController{
             return;
           }
           const prompt = `
-            Analyze these Etsy products and suggest the ideal SEO strategy.\n\n` + 
+            You are an expert in Etsy SEO. You will receive a list of products, each with a title, description, and tags.
+  
+            Create a proposusal for a new product based on the coincidences of the given products :
+            - Evaluate their titles and descriptions SEO qualities and create a title and keywordd for the description.
+            - Suggest 3–5 better tags if needed.
+            
+            Then provide a global summary:
+            - Recommend a model product title combining the best elements.
+            - Suggest trending keywords that are common or missing.
+            - Recommend a set of ideal tags for Etsy ranking.` + 
             products.map(
                 (p: any, i: number) => 
                     `Product ${i + 1}:\nTitle: ${p.title}\nDescription: ${p.description}\nTags: ${p.tags?.join(', ')}`
             )
             .join('\n\n');
         try {
-            const result = await this.openAIService.generateCompletion(prompt, 'You are an Etsy SEO specialist.');
+            const result = await this.openAIService.generateCompletion(prompt, 'You are a helpful and concise assistant specialized in Etsy SEO optimization');
             res.json({ result });
           } catch (e: any) {
             res.status(500).json({ error: e.message });
@@ -73,7 +82,7 @@ export class AIController{
         Evaluate whether the title contains relevant keywords, if the description is engaging and uses helpful keywords, and whether the tags help improve visibility. Suggest improvements.
             `;
 
-        const response = await this.openAIService.generateCompletion(prompt, 'You are an expert in Etsy SEO.');
+        const response = await this.openAIService.generateCompletion(prompt, 'You are an expert in Etsy SEO. Analyze the following product and provide a SEO Score (0-100) and recommendations to improve its visibility on Etsy. Be clear and concise.`');
         res.json({ result: response });
 
         
