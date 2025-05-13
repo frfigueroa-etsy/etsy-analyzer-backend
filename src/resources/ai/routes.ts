@@ -13,6 +13,7 @@ export class AIRoutes {
         router.get('/test', controller.test);
         router.post('/analyze-seo', controller.analyzeSEO);
         router.post('/benchmark-analyze', controller.benchmark);
+        router.post('/analyze-seo-from-listing', controller.analyzeSEOFromListing);
 
 
         return router;

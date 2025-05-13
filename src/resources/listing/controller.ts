@@ -6,7 +6,7 @@ export class ListingController{
 
     constructor(public etsyService:EtsyService){}
 
-    public searchListings = async (req:Request, res:Response) => {
+    public searchListings = async (req:Request, res:Response): Promise<void> => {
         const keyword = req.query.q as string;
         try {
             const data = await this.etsyService.searchListings(keyword);
@@ -15,7 +15,8 @@ export class ListingController{
             res.status(500).json({ error: e.message });
           }
     }
-    public getListing = async (req:Request, res:Response) => {
+
+    public getListing = async (req:Request, res:Response): Promise<void> => {
         const listingId = req.params.listingId;
         try {
             const data = await this.etsyService.getListing(listingId);
