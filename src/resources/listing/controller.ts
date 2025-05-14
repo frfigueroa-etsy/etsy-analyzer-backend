@@ -22,12 +22,21 @@ export class ListingController{
 
     public getListing = async (req:Request, res:Response): Promise<void> => {
         const listingId = req.params.listingId;
+        const includesParam = req.query.includes;
+
         if (!listingId) {
           res.status(400).json({ error: 'Missing listingId' });
           return;
         }
+        let includes: string[] | undefined = undefined;
+        if (typeof includesParam === 'string') {
+          includes = [includesParam];
+        } else if (Array.isArray(includesParam)) {
+          includes = includesParam;
+        }
+
         try {
-            const data = await this.etsyService.getListing(listingId);
+            const data = await this.etsyService.getListing(listingId, includes);
             res.json(data);
           } catch (e: any) {
             res.status(500).json({ error: e.message });

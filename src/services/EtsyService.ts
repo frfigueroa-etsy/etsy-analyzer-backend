@@ -24,11 +24,16 @@ export class EtsyService {
   async searchListings(keyword: string): Promise<any> {
     const encoded = encodeURIComponent(keyword);
     const url = `${envs.ETSY_API_URL}/listings/active?keywords=${encoded}&limit=50&sort_on=score`;
+   
     return this.get<any>(url);
   }
 
-  async getListing(listingId: string): Promise<any> {
-    const url = `${envs.ETSY_API_URL}/listings/${listingId}`;
+  async getListing(listingId: string, includes?: string[]): Promise<any> {
+    let url = `${envs.ETSY_API_URL}/listings/${listingId}`;
+    if (includes && includes.length > 0) {
+      const includesParam = includes.map(encodeURIComponent).join(',');
+      url += `&includes=${includesParam}`;
+    }
    return this.get<any>(url);
   }
 
