@@ -19,6 +19,8 @@ export class EtsyService {
     }
   }
 
+  // ShopListing
+
   async searchListings(keyword: string): Promise<any> {
     const encoded = encodeURIComponent(keyword);
     const url = `${envs.ETSY_API_URL}/listings/active?keywords=${encoded}&limit=50&sort_on=score`;
@@ -30,22 +32,26 @@ export class EtsyService {
    return this.get<any>(url);
   }
 
-  async getLedger(shopId: string): Promise<any> {
-    const url = `${envs.ETSY_API_URL}/shops/${shopId}/payment-account/ledger-entries`;
+  // Payment
+
+  async getPaymentAccountLedgerEntryPayments(shopId: string): Promise<any> {
+    const url = `${envs.ETSY_API_URL}/shops/${shopId}/payment-account/ledger-entries/payments`;
     return this.get<any>(url);
   }
 
-  async getReceipts(shopId: string): Promise<any> {
-    const url = `${envs.ETSY_API_URL}/shops/${shopId}/receipts`;
+  async getPayments(shopId: string): Promise<any> {
+    const url = `${envs.ETSY_API_URL}/shops/${shopId}/payments`;
     return this.get<any>(url);
   }
 
-  async getTransactions(shopId: string, receiptId: string): Promise<any> {
-    const url = `${envs.ETSY_API_URL}/shops/${shopId}/receipts/${receiptId}/transactions`;
+  async getShopPaymentByReceiptId(shopId: string, receiptId: string): Promise<any> {
+    const url = `${envs.ETSY_API_URL}/shops/${shopId}/receipts/${receiptId}/payments`;
     return this.get<any>(url);
   }
 
-  async fetchJSON(url: string): Promise<any> {
-    return this.get<any>(url);
+  // Shop
+  async getShop(shopId: string): Promise<any> {
+    const url = `${envs.ETSY_API_URL}/shops/${shopId}`;
+   return this.get<any>(url);
   }
 }

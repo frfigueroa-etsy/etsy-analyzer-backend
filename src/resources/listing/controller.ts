@@ -8,6 +8,10 @@ export class ListingController{
 
     public searchListings = async (req:Request, res:Response): Promise<void> => {
         const keyword = req.query.q as string;
+        if (!keyword) {
+          res.status(400).json({ error: 'Missing keyword' });
+          return;
+        }
         try {
             const data = await this.etsyService.searchListings(keyword);
             res.json(data);
@@ -18,6 +22,10 @@ export class ListingController{
 
     public getListing = async (req:Request, res:Response): Promise<void> => {
         const listingId = req.params.listingId;
+        if (!listingId) {
+          res.status(400).json({ error: 'Missing listingId' });
+          return;
+        }
         try {
             const data = await this.etsyService.getListing(listingId);
             res.json(data);

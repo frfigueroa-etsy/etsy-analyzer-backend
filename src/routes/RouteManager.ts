@@ -6,25 +6,19 @@ import { ShopController } from '../controllers/ShopController';
 import { envs } from '../configs/envs';
 import { ShopListingRoutes } from '../resources/listing/routes';
 import { AIRoutes } from '../resources/ai/routes';
+import { ShopRoutes } from '../resources/shop/routes';
 
 export class RouterManager {
 
   static get routes ():Router {
     const router = Router();
 
+    router.use('/etsy/shop', ShopRoutes.routes);
     router.use('/etsy/shopListing', ShopListingRoutes.routes);
     router.use('/ai', AIRoutes.routes);
+    // router.use('/payments', AIRoutes.routes);
 
 
-    // const openaiService = new OpenAIService(Envs.get('OPENAI_API_KEY'));
-
-    // const controller = new ShopController(etsyService, openaiService);
-
-    // router.get('/ping', controller.ping.bind(controller));
-    // router.get('/etsy/search', controller.searchListings);
-    // router.post('/analyze-seo', controller.analyzeSEO);
-    // router.post('/analyze-listing', controller.analyzeListing);
-    // router.post('/benchmark-analyze', controller.benchmark);
 
     // router.get('/shop/:shopId/ledger', controller.financialAnalysis);
     // router.get('/shop/:shopId/product-sales', controller.productSales);
