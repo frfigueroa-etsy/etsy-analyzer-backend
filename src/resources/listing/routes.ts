@@ -12,8 +12,11 @@ export class ShopListingRoutes {
 
         router.get('/search', controller.searchListings);
         router.post('/analyze-listing', controller.analyzeListing);
-
         router.get('/listing/:listingId', controller.getListing);
+
+        // Reviews
+        router.get('/reviews/listing/:listingId', controller.getListingReviews);
+        
 
         return router;
 

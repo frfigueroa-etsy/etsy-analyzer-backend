@@ -23,6 +23,11 @@ export class AIRoutes {
         router.post('/analyze-listing-conversion', controller.listingConversion);
         router.post('/analyze-professional-benchmark', controller.professionalBenchmark);
 
+        // Reviews analysis
+
+        router.post('/analyze-listing-reviews', controller.analyzeListingReviews);
+        router.post('/analyze-shop-reviews', controller.analyzeShopReviews);
+
         return router;
 
     }

@@ -15,6 +15,8 @@ export class ShopRoutes {
         router.get('/ledger-entries/:shopId', controller.getPaymentAccountLedgerEntryPayments);
         router.get('/payments/:shopId', controller.getPayments);
         router.get('/receipts/:shopId/:receiptId/payments', controller.getShopPaymentByReceiptId);
+        // Reviews
+        router.get('/reviews/:shopId', controller.getShopReviews);
 
         return router;
 

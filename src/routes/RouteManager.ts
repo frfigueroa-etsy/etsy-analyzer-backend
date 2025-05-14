@@ -16,9 +16,6 @@ export class RouterManager {
     router.use('/etsy/shop', ShopRoutes.routes);
     router.use('/etsy/shopListing', ShopListingRoutes.routes);
     router.use('/ai', AIRoutes.routes);
-    // router.use('/payments', AIRoutes.routes);
-
-
 
     // router.get('/shop/:shopId/ledger', controller.financialAnalysis);
     // router.get('/shop/:shopId/product-sales', controller.productSales);

@@ -59,4 +59,16 @@ export class EtsyService {
     const url = `${envs.ETSY_API_URL}/shops/${shopId}`;
    return this.get<any>(url);
   }
+
+  // Reviews
+  async getListingReviews(listingId: number): Promise<any> {
+    const url = `${envs.ETSY_API_URL}/listings/${listingId}/reviews?limit=30`;
+    return this.get<any>(url);
+  }
+
+  async getShopReviews(shopId: number): Promise<any> {
+    const url = `${envs.ETSY_API_URL}/shops/${shopId}/reviews?limit=30`;
+    return this.get<any>(url);
+  }
+
 }

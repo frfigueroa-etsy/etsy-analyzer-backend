@@ -60,4 +60,21 @@ export class ShopController{
             res.status(500).json({ error: e.message });
           }
     }
+
+    // Reviews
+    public getShopReviews = async (req: Request, res: Response): Promise<void> => {
+      const shopId = parseInt(req.params.shopId);
+  
+      if (!shopId || isNaN(shopId)) {
+        res.status(400).json({ error: 'Invalid or missing shopId' });
+        return;
+      }
+  
+      try {
+        const reviews = await this.etsyService.getShopReviews(shopId);
+        res.json(reviews);
+      } catch (e: any) {
+        res.status(500).json({ error: e.message });
+      }
+    }
 }

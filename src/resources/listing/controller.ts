@@ -77,4 +77,21 @@ export class ListingController{
       }
     }
 
+    // Reviews
+    public getListingReviews = async (req: Request, res: Response): Promise<void> => {
+      const listingId = parseInt(req.params.listingId);
+  
+      if (!listingId || isNaN(listingId)) {
+        res.status(400).json({ error: 'Invalid or missing listingId' });
+        return;
+      }
+  
+      try {
+        const reviews = await this.etsyService.getListingReviews(listingId);
+        res.json(reviews);
+      } catch (e: any) {
+        res.status(500).json({ error: e.message });
+      }
+    }
+
 }

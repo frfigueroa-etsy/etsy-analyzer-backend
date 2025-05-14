@@ -255,4 +255,91 @@ export class AIController{
         res.status(500).json({ error: e.message });
       }
     }
+
+
+    // Reviews
+
+    public analyzeListingReviews = async (req: Request, res: Response): Promise<void> => {
+      const { reviews } = req.body;
+    
+      if (!reviews || !Array.isArray(reviews)) {
+        res.status(400).json({ error: 'Invalid reviews' });
+        return;
+      }
+    
+      const prompt = `
+    You are a customer satisfaction expert specialized in analyzing product reviews from Etsy.
+    
+    You will receive a list of customer reviews for a product, including their rating (from 1 to 5 stars), the written review, and language information.
+    
+    Your task:
+    - Detect common pain points or complaints mentioned.
+    - Highlight what customers appreciate the most.
+    - Determine if language or cultural patterns are relevant.
+    - Identify improvement opportunities based on real feedback.
+    - Provide a concise summary that helps sellers improve their product, communication, or service.
+    
+    Here are the reviews:
+    ${reviews.map((r, i) => {
+      const date = new Date((r.created_timestamp || r.create_timestamp) * 1000).toISOString().split('T')[0];
+      return `Review ${i + 1}:
+    Rating: ${r.rating} / 5
+    Language: ${r.language}
+    Date: ${date}
+    Text: ${r.review}`;
+    }).join('\n\n')}
+      `.trim();
+    
+      try {
+        const result = await this.openAIService.generateCompletion(
+          prompt,
+          'You are a helpful assistant and expert in customer satisfaction and product feedback analysis.'
+        );
+        res.json({ result });
+      } catch (e: any) {
+        res.status(500).json({ error: e.message });
+      }
+    }
+
+    public analyzeShopReviews = async (req: Request, res: Response): Promise<void> => {
+      const { reviews } = req.body;
+    
+      if (!reviews || !Array.isArray(reviews)) {
+        res.status(400).json({ error: 'Invalid reviews' });
+        return;
+      }
+    
+      const prompt = `
+    You are a customer satisfaction expert specialized in analyzing Etsy shop reviews.
+    
+    You will receive a list of customer reviews for a shop, including their rating (from 1 to 5 stars), the written review, and language information.
+    
+    Your task:
+    - Detect recurring complaints or service issues.
+    - Highlight what aspects of the shop are most valued by customers (e.g. fast delivery, packaging, communication).
+    - Evaluate if the feedback reveals strengths or weaknesses in shop policies or customer support.
+    - Identify opportunities for improving the customer experience and brand trust.
+    - Provide a short, clear summary that helps the seller improve their operations, service, or communication strategy.
+    
+    Here are the reviews:
+    ${reviews.map((r, i) => {
+      const date = new Date((r.created_timestamp || r.create_timestamp) * 1000).toISOString().split('T')[0];
+      return `Review ${i + 1}:
+    Rating: ${r.rating} / 5
+    Language: ${r.language}
+    Date: ${date}
+    Text: ${r.review}`;
+    }).join('\n\n')}
+      `.trim();
+    
+      try {
+        const result = await this.openAIService.generateCompletion(
+          prompt,
+          'You are a helpful assistant and expert in shop-level customer satisfaction analysis.'
+        );
+        res.json({ result });
+      } catch (e: any) {
+        res.status(500).json({ error: e.message });
+      }
+    }
 }
