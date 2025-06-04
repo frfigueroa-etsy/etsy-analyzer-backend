@@ -16,6 +16,8 @@ export class ShopListingRoutes {
 
         // Reviews
         router.get('/reviews/listing/:listingId', controller.getListingReviews);
+        // Media (getListingImages)
+        router.get('/images/listing/:listingId', controller.getListingImages);
         
 
         return router;

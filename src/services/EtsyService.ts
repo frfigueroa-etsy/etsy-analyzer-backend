@@ -71,4 +71,11 @@ export class EtsyService {
     return this.get<any>(url);
   }
 
+  // Media
+  async getListingImages(listingId: number): Promise<any> {
+    const url = `${envs.ETSY_API_URL}/listings/${listingId}/images`;
+     return this.get<any>(url);
+
+  }
+
 }

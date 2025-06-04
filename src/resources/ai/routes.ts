@@ -28,6 +28,13 @@ export class AIRoutes {
         router.post('/analyze-listing-reviews', controller.analyzeListingReviews);
         router.post('/analyze-shop-reviews', controller.analyzeShopReviews);
 
+        // Image analysis
+        router.post('/analyze-image', controller.analyzeImage);
+        router.post('/image-creation', controller.analyzeImage);
+        // Image creation
+        // Video creation
+        router.post('/video-creation', controller.createVideo);
+
         return router;
 
     }

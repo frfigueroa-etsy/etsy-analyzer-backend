@@ -16,6 +16,7 @@ export class ListingController{
             const data = await this.etsyService.searchListings(keyword);
             res.json(data);
           } catch (e: any) {
+            console.log(e)
             res.status(500).json({ error: e.message });
           }
     }
@@ -89,6 +90,23 @@ export class ListingController{
       try {
         const reviews = await this.etsyService.getListingReviews(listingId);
         res.json(reviews);
+      } catch (e: any) {
+        res.status(500).json({ error: e.message });
+      }
+    }
+
+    // Media 
+    public getListingImages = async (req: Request, res: Response): Promise<void> => {
+      const listingId = parseInt(req.params.listingId);
+  
+      if (!listingId || isNaN(listingId)) {
+        res.status(400).json({ error: 'Invalid or missing listingId' });
+        return;
+      }
+  
+      try {
+        const images = await this.etsyService.getListingImages(listingId);
+        res.json(images);
       } catch (e: any) {
         res.status(500).json({ error: e.message });
       }

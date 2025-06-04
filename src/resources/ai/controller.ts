@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { OpenAIService } from '../../services/OpenAIService';
 import { EtsyService } from '../../services/EtsyService';
+import { RunwayService } from '../../services/RunwayService';
+
 import { envs } from '../../configs/envs';
 
 export class AIController{
@@ -342,4 +344,62 @@ export class AIController{
         res.status(500).json({ error: e.message });
       }
     }
+
+    // Media
+    public analyzeImage = async (req:Request, res:Response): Promise<void> => {
+        const { imgUrl } = req.body;
+        if (!imgUrl) {
+            res.status(400).json({ error: 'Invalid image' });
+            return;
+          }
+          const prompt = `
+          Evaluate if the image could be improved by showing the product in use by a human model.
+          Recommend if a white background or lifestyle background would perform better.
+          `;
+
+        try {
+            const result = await this.openAIService.generateImageAnalysisFromURL(imgUrl, prompt);
+            res.json({ result });
+          } catch (e: any) {
+            res.status(500).json({ error: e.message });
+          }
+    }
+    // Create video 
+    public createVideo = async (req:Request, res:Response): Promise<void> => {
+      const { imgUrl, promptText } = req.body;
+
+      if (!imgUrl || typeof imgUrl !== 'string') {
+        res.status(400).json({ error: 'Invalid or missing image URL' });
+        return;
+      }
+      const runwayService = new RunwayService();
+
+
+      try {
+        // Paso 1: Create task
+        const createTask = await runwayService.createVideoFromImage({
+          promptImage: imgUrl,
+          promptText: promptText || 'Create a dynamic promotional video for this product.',
+          ratio: '1280:720',
+          duration: 5
+        });
+
+        const taskId = createTask.id;
+
+        // Paso 2: Wait until complete 
+        const completedTask = await runwayService.waitForCompletion(taskId);
+
+        if (completedTask.status === 'SUCCEEDED') {
+          res.json(completedTask);
+        } else {
+          res.status(500).json({
+            error: 'Video generation failed',
+            task: completedTask,
+          });
+        }
+      } catch (err: any) {
+        console.error('RunwayML video generation error:', err.message);
+        res.status(500).json({ error: 'Unexpected error during video generation' });
+      }
+    };
 }
